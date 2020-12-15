@@ -1,7 +1,7 @@
 ﻿using Microsoft.Identity.Client;
 using System;
 using System.Threading.Tasks;
-using Microsoft.Graph;    
+using Microsoft.Graph;
 using Microsoft.Graph.Auth;
 
 namespace GraphClient
@@ -22,10 +22,20 @@ namespace GraphClient
             {
                 "user.read"
             };
-            var result = await app
-                .AcquireTokenInteractive(scopes)
-                .ExecuteAsync();
-            await Console.Out.WriteLineAsync($"Token:\t{result.AccessToken}");
+            // commented out in exercise 3 task 3
+            // var result = await app
+            //     .AcquireTokenInteractive(scopes)
+            //     .ExecuteAsync();
+            // await Console.Out.WriteLineAsync($"Token:\t{result.AccessToken}");
+
+            var provider = new DeviceCodeProvider(app, scopes);
+            var client = new GraphServiceClient(provider);
+            var myProfile = await client.Me
+                .Request()
+                .GetAsync();
+
+            await Console.Out.WriteLineAsync($"Name:\t{myProfile.DisplayName}");
+            await Console.Out.WriteLineAsync($"AAD Id:\t{myProfile.Id}");
         }
     }
 }
