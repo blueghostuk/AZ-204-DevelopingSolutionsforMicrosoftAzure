@@ -3,6 +3,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 
 namespace func
 {
@@ -13,7 +14,10 @@ namespace func
             [HttpTrigger("GET")] HttpRequest request)
         { 
             string connectionString = Environment.GetEnvironmentVariable("StorageConnectionString");
-            return new OkObjectResult(connectionString);
+            // return new OkObjectResult(connectionString);
+            BlobClient blob = new BlobClient(connectionString, "drop", "records.json");
+            var response = await blob.DownloadAsync();
+            return new FileStreamResult(response?.Value?.Content, response?.Value?.ContentType);
         }
 
     }
