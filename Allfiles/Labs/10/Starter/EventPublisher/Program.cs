@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.EventGrid;
 using Microsoft.Azure.EventGrid.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -30,7 +31,8 @@ namespace EventPublisher
                 EventType = "Employees.Registration.New",
                 EventTime = DateTime.Now,
                 Subject = $"New Employee: {firstPerson.FullName}",
-                Data = firstPerson.ToString(),
+                //Data = firstPerson.ToString(),
+                Data = JsonConvert.SerializeObject(firstPerson),
                 DataVersion = "1.0.0"
             };
             events.Add(firstEvent);
@@ -47,7 +49,8 @@ namespace EventPublisher
                 EventType = "Employees.Registration.New",
                 EventTime = DateTime.Now,
                 Subject = $"New Employee: {secondPerson.FullName}",
-                Data = secondPerson.ToString(),
+                //Data = secondPerson.ToString(),
+                Data = JsonConvert.SerializeObject(secondPerson),
                 DataVersion = "1.0.0"
             };
             events.Add(secondEvent);
